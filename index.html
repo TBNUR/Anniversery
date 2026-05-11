@@ -90,9 +90,8 @@
     <canvas id="galaxy-canvas"></canvas>
 
     <!-- Audio BGM -->
-    <audio id="bgm" loop>
-        <!-- Mengambil file audio langsung dari dalam folder -->
-        <source src="supernatural.weba" type="audio/webm">
+    <audio id="bgm" loop preload="auto">
+        <source src="supernatural.mp3" type="audio/mpeg">
     </audio>
 
     <div id="intro" class="fixed inset-0 flex flex-col items-center justify-center z-50 bg-[#05020a] transition-opacity duration-1000 w-full overflow-hidden">
