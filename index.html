@@ -110,9 +110,12 @@
         <h2 id="text-2" class="intro-text serif italic text-xl md:text-4xl text-gray-300">Hari ini hari yang spesial.</h2>
         <h2 id="text-3" class="intro-text serif italic text-xl md:text-4xl text-[#d4af37]">Ada sesuatu yang pengen aku tunjukin ke kamu...</h2>
         
-        <button id="open-btn" class="intro-text px-6 py-3 mt-16 md:mt-20 border border-[#d4af37] text-[#d4af37] rounded-full hover:bg-[#d4af37] hover:text-[#080808] tracking-[0.2em] text-[10px] md:text-xs uppercase cursor-pointer glow-button">
-            Buka Semesta Kita
-        </button>
+        <!-- Tombol dibungkus div agar posisinya aman dari teks yang memanjang di HP -->
+        <div id="btn-wrapper" class="intro-text mt-36 md:mt-28">
+            <button id="open-btn" class="px-6 py-3 border border-[#d4af37] text-[#d4af37] rounded-full hover:bg-[#d4af37] hover:text-[#080808] tracking-[0.2em] text-[10px] md:text-xs uppercase cursor-pointer glow-button">
+                Buka Semesta Kita
+            </button>
+        </div>
     </div>
 
     <div id="main" class="hidden relative z-10 container mx-auto px-4 md:px-6 py-12 md:py-20 flex flex-col items-center opacity-0 transition-opacity duration-1000 overflow-hidden w-full">
@@ -170,12 +173,13 @@
         const text1 = document.getElementById('text-1');
         const text2 = document.getElementById('text-2');
         const text3 = document.getElementById('text-3');
+        const btnWrapper = document.getElementById('btn-wrapper');
         const btn = document.getElementById('open-btn');
 
         setTimeout(() => { text1.classList.add('show'); }, 500);
         setTimeout(() => { text1.classList.remove('show'); text2.classList.add('show'); }, 3500);
         setTimeout(() => { text2.classList.remove('show'); text3.classList.add('show'); }, 6500);
-        setTimeout(() => { btn.classList.add('show'); }, 8500);
+        setTimeout(() => { btnWrapper.classList.add('show'); }, 8500);
 
         btn.addEventListener('click', () => {
             const bgm = document.getElementById('bgm');
@@ -204,7 +208,7 @@
            FETCH API DARI GOOGLE APPS SCRIPT
            ========================================= */
         function fetchImagesFromAPI() {
-            if(API_URL === "https://script.google.com/macros/s/AKfycbyAnMDaUJIN5PuT9CtIVvLLNyT7SvXlbMSedj0g6lSejPtvU6ZknimDnQxxhQu-3ZA2lA/exec") {
+            if(API_URL === "MASUKKAN_URL_WEB_APP_APPS_SCRIPT_DI_SINI") {
                 document.getElementById('loading-indicator').innerHTML = 
                     '<p class="text-red-400">Peringatan: URL API Google Apps Script belum dimasukkan ke kode HTML!</p>';
                 return;
@@ -389,4 +393,3 @@
     </script>
 </body>
 </html>
-```
