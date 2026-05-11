@@ -84,17 +84,6 @@
             border: 1px solid rgba(253, 184, 19, 0.5) !important;
         }
         .arc-reactor { filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.8)); }
-
-        .loader {
-            border: 3px solid rgba(255,255,255,0.1);
-            border-left-color: #d4af37;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -102,7 +91,8 @@
 
     <!-- Audio BGM -->
     <audio id="bgm" loop>
-        <source src="https://drive.google.com/uc?export=download&id=1cmqvm3hSzznh7NqWJBZBenKatVfrf8Gg" type="audio/mpeg">
+        <!-- Mengambil file audio langsung dari dalam folder -->
+        <source src="supernatural.weba" type="audio/webm">
     </audio>
 
     <div id="intro" class="fixed inset-0 flex flex-col items-center justify-center z-50 bg-[#05020a] transition-opacity duration-1000 w-full overflow-hidden">
@@ -139,11 +129,7 @@
         </div>
 
         <div id="story-container" class="w-full max-w-5xl mt-10">
-            <!-- Loading State -->
-            <div id="loading-indicator" class="col-span-full text-center py-10 w-full reveal-up">
-                <div class="loader mb-4"></div>
-                <p class="text-gray-400 text-sm italic serif tracking-wider mt-4">Menyusun kenangan kita...</p>
-            </div>
+            <!-- Konten cerita akan langsung digenerate di sini tanpa loading -->
         </div>
 
         <div class="mt-40 mb-20 text-center reveal-up flex flex-col items-center">
@@ -155,18 +141,36 @@
 
     <script>
         /* =========================================
-           PASTE URL GOOGLE APPS SCRIPT DI SINI!
+           DATA GAMBAR & CERITA (LANGSUNG DARI FILE)
            ========================================= */
-        const API_URL = "https://script.google.com/macros/s/AKfycbyAnMDaUJIN5PuT9CtIVvLLNyT7SvXlbMSedj0g6lSejPtvU6ZknimDnQxxhQu-3ZA2lA/exec";
-
-        // Daftar Cerita
-        const daftarCerita = [
-            "Semuanya berawal dari kantor dan perjalanan dinas kita waktu itu. Siapa sangka, teman perjalananku saat itu sekarang jadi teman hidupku selamanya.",
-            "Jalan kita emang nggak selalu mulus. Ada kalanya kita berdebat, ngambek-ngambekan, terus akhirnya baikan lagi. Tapi dari situ kita belajar buat saling mendewasakan, kan?",
-            "Sampai akhirnya kita mantap buat mengikat janji. Jujur aja, walaupun kadang kamu nyebelin, rasa sayangku ke kamu itu jauh lebih besar dari apa pun.",
-            "Mungkin kedengarannya lebay, tapi aku beneran rela kehilangan apa pun di dunia ini, asalkan aku nggak kehilangan kamu.",
-            "Harapanku buat pernikahan kita... semoga kita nggak pernah capek buat saling memahami, mau nurunin ego masing-masing, dan terus saling mencintai.",
-            "Di dunia yang kadang jahat ini, biarkan aku terus jadi Ironman-mu. Yang bakal selalu melindungimu, menjagamu, dan mastiin kamu tetap tersenyum."
+        // Ganti teks "foto1.jpg" dll dengan nama file foto Anda yang asli.
+        // Pastikan foto-foto tersebut berada di folder yang sama dengan file index.html ini saat diupload ke Netlify!
+        
+        const memoriKita = [
+            {
+                image: "foto1.jpg", // <--- GANTI DENGAN NAMA FILE FOTO KE-1 (misal: "1.jpg" atau "awal-ketemu.png")
+                quote: "Semuanya berawal dari kantor dan perjalanan dinas kita waktu itu. Siapa sangka, teman perjalananku saat itu sekarang jadi teman hidupku selamanya."
+            },
+            {
+                image: "foto2.jpg", // <--- GANTI DENGAN NAMA FILE FOTO KE-2
+                quote: "Jalan kita emang nggak selalu mulus. Ada kalanya kita berdebat, ngambek-ngambekan, terus akhirnya baikan lagi. Tapi dari situ kita belajar buat saling mendewasakan, kan?"
+            },
+            {
+                image: "foto3.jpg", // <--- GANTI DENGAN NAMA FILE FOTO KE-3
+                quote: "Sampai akhirnya kita mantap buat mengikat janji. Jujur aja, walaupun kadang kamu nyebelin, rasa sayangku ke kamu itu jauh lebih besar dari apa pun."
+            },
+            {
+                image: "foto4.jpg", // <--- GANTI DENGAN NAMA FILE FOTO KE-4
+                quote: "Mungkin kedengarannya lebay, tapi aku beneran rela kehilangan apa pun di dunia ini, asalkan aku nggak kehilangan kamu."
+            },
+            {
+                image: "foto5.jpg", // <--- GANTI DENGAN NAMA FILE FOTO KE-5
+                quote: "Harapanku buat pernikahan kita... semoga kita nggak pernah capek buat saling memahami, mau nurunin ego masing-masing, dan terus saling mencintai."
+            },
+            {
+                image: "foto6.jpg", // <--- GANTI DENGAN NAMA FILE FOTO KE-6 (IRONMAN CHAPTER)
+                quote: "Di dunia yang kadang jahat ini, biarkan aku terus jadi Ironman-mu. Yang bakal selalu melindungimu, menjagamu, dan mastiin kamu tetap tersenyum."
+            }
         ];
 
         /* Logika Intro Penasaran */
@@ -194,8 +198,8 @@
                 intro.style.display = 'none';
                 main.classList.remove('hidden');
                 
-                // Ambil foto dari API Google Apps Script
-                fetchImagesFromAPI();
+                // Bangun cerita langsung dari array di atas secara instan
+                buildStory();
 
                 setTimeout(() => {
                     main.style.opacity = '1';
@@ -205,47 +209,15 @@
         });
 
         /* =========================================
-           FETCH API DARI GOOGLE APPS SCRIPT
-           ========================================= */
-        function fetchImagesFromAPI() {
-            if(API_URL === "MASUKKAN_URL_WEB_APP_APPS_SCRIPT_DI_SINI") {
-                document.getElementById('loading-indicator').innerHTML = 
-                    '<p class="text-red-400">Peringatan: URL API Google Apps Script belum dimasukkan ke kode HTML!</p>';
-                return;
-            }
-
-            fetch(API_URL)
-                .then(response => response.json())
-                .then(result => {
-                    if(result.status === "success") {
-                        buildStory(result.data);
-                    } else {
-                        document.getElementById('loading-indicator').innerHTML = 
-                            '<p class="text-red-400">Gagal memuat: ' + result.message + '</p>';
-                    }
-                })
-                .catch(error => {
-                    document.getElementById('loading-indicator').innerHTML = 
-                        '<p class="text-red-400">Gagal terhubung ke Google Drive. Pastikan URL API sudah benar.</p>';
-                    console.error("Fetch Error:", error);
-                });
-        }
-
-        /* =========================================
            MEMBANGUN CERITA
            ========================================= */
-        function buildStory(imageIds) {
+        function buildStory() {
             const storyContainer = document.getElementById('story-container');
-            document.getElementById('loading-indicator').style.display = 'none'; 
+            storyContainer.innerHTML = ''; // Pastikan bersih
 
-            if (!imageIds || imageIds.length === 0) {
-                storyContainer.innerHTML = '<p class="text-gray-400 text-center col-span-full italic serif my-20">Belum ada foto kenangan di dalam folder Drive-mu.</p>';
-                return;
-            }
-
-            imageIds.forEach((id, index) => {
-                const imageUrl = 'https://drive.google.com/uc?export=view&id=' + id;
-                const quoteText = daftarCerita[index] || "Setiap detik bersamamu adalah anugerah terindah.";
+            memoriKita.forEach((item, index) => {
+                const imageUrl = item.image; // Mengambil path gambar langsung
+                const quoteText = item.quote;
                 
                 const isEven = index % 2 === 0;
                 const imgAnimationClass = isEven ? 'reveal-left' : 'reveal-right';
@@ -271,7 +243,8 @@
                 section.innerHTML = `
                     <div class="w-full md:w-1/2 flex justify-center ${imgAnimationClass} floating" style="animation-delay: ${index * 0.5}s">
                         <div class="polaroid ${polaroidRotateClass} ${ironmanCardClass} max-w-[85%] md:max-w-sm w-full">
-                            <img src="${imageUrl}" alt="Kenangan" class="w-full aspect-[3/4] md:h-[400px] object-cover" loading="lazy" />
+                            <!-- Fallback image error agar tidak terlihat pecah jika nama file salah -->
+                            <img src="${imageUrl}" onerror="this.src='https://via.placeholder.com/400x500/1b0b2e/d4af37?text=Foto+Belum+Ditemukan'" alt="Kenangan" class="w-full aspect-[3/4] md:h-[400px] object-cover" loading="lazy" />
                             <div class="absolute bottom-3 left-0 w-full text-center">
                                 <span class="serif italic ${isIronman ? 'text-red-600 font-bold' : 'text-gray-500'} text-xs md:text-sm">
                                     Chapter ${index + 1} ${isIronman ? ' - The Ironman' : ''}
